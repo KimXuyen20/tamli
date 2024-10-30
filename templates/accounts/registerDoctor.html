@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<body>
+{% block register %}
+<section class="section-content padding-y">
+
+    <!-- ============================ COMPONENT REGISTER   ================================= -->
+        <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+          <article class="card-body">
+        {% include 'includes/alerts.html' %}
+            <header class="mb-4"><h4 class="card-title">Sign up</h4></header>
+            
+            <form action="{% url 'registerDoctor' %}" class="form-fields-set foodbakery-dev-restaurant-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                    
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label>First name</label>{{form.first_name}}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label>Last name</label>{{form.last_name}}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label>Doctor name</label>{{d_form.doctor_name}} 
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label>Doctor License</label>{{d_form.doctor_license}} 
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label>Email Address</label>{{form.email}}
+                                                </div>
+                                            </div>
+                                           
+                                                       
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label>Password</label>
+                                                    {{form.password}}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label>Confirm Password</label>
+                                                    {{form.confirm_password}}
+                                                </div>
+                                            </div>
+                                        
+                                
+                                </div>
+                            </div>
+                        </div>
+                    
+                   
+                            {% for field in form %}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <li style="color: red;">{{error}}</li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                            <div style="color: red;">{{form.non_field_errors}}</div>
+                        <br><br>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="field-holder">
+                                    <div class="payment-holder">
+                                        <input type="submit" value="Submit" id="btn-next-restaurant-information" class="bgcolor">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <!-- Load message -->
+                                {% include 'includes/alerts.html' %}
+                            </div>
+                        </div>
+                   
+               
+            </form>
+            </article><!-- card-body.// -->
+        </div> <!-- card .// -->
+        <p class="text-center mt-4">Have an account? <a href="{% url 'login' %}">Log In</a></p>
+        <br><br>
+    <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+    
+    
+</section>
+
+{% endblock %}
+</body>
+</html>

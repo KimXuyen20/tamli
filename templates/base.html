@@ -6,12 +6,52 @@
 
 
 <body>
+    <header class="flex items-center justify-between bg-black h-20 px-8 text-white sticky top-0 z-40">
+        <div>
+            <a href="{% url 'home'%}" class="brand-wrap">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" width="70" height="70">
+            </a> <!-- brand-wrap.// -->
+        </div>
+        <nav class="block relative">
+            <ul class="navitems flex items-center justify-center h-full">
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blog' %}">Bài viết</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Tư vấn trực tiếp</a></li>
+                <li><a class="dropdown-item" href="{% url 'chat' %}"><i class="fas fa-envelope"></i>Tư vấn trực tuyến</a></li>          
+               
+                <li x-data="{ dropdownOpen: false }" class="relative">
+                    <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                        <img class="h-8 w-8 rounded-full object-cover" src="{{ request.user.profile.avatar }}" alt="Avatar" />
+                        {{ request.user.profile.name }}
+                        <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/ffffff/expand-arrow.png" alt="Dropdown" />
+                    </a>
+                     <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                    x-transition:enter="duration-300 ease-out"
+                    x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                    >
+                        <ul class="hoverlist [&>li>a]:justify-end">
+                            <li><a href="{% url 'profile' %}">My Profile</a></li>
+                            <li><a href="{% url 'edit' %}">Edit Profile</a></li>
+                         
+                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                        </ul>
+                    </div>
+                
+                {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Signup</a></li>
+                <li><a href="{% url 'registerDoctor' %}">  Register Doctor </a></li>
+                  
+                {% endif %}
     
-
-
-    
-    
-    
+            </ul>
+           
+        </nav>
+</header>
     {% block content %}{% endblock content %}
     {% block main-content %}{% endblock main-content %}
     {% block blog %}{% endblock blog %}
@@ -19,5 +59,42 @@
     {% block register %}{% endblock register %}
     {% block chat %}{% endblock chat %}
     {%block javascript %}{%endblock javascript %}
+    {% block profile %}{% endblock profile %}
+
+
+
+    <footer class="section-footer border-top">
+        <div class="container">
+            <section class="footer-top padding-y">
+                <div class="row">
+                    <div class="col-12 col-lg-3 col-sm-12 mb-2">
+                        <!-- Content -->
+                    
+                        <img src="{% static 'images/logo.png' %}" alt="Logo" width="50" height="50">
+            
+                    
+                        <p class="mt-2 text-dark">
+                          © 2024 Copyright: PSY&X
+                        </p>
+                      </div>
+                    <aside class="col-md-3">
+                        <h5 class="title">Customer service</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Contact us</a></li>
+                            <li><a href="#">Frequently asked questions</a></li>
+                        </ul>
+                    </aside> <!-- col.// -->
+                    <aside class="col-md-3">
+                        <h5 class="title">My account</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="{% url 'login' %}">Sign in</a></li>
+                            {% comment %} <li><a href="#">My orders</a></li>
+                            <li><a href="#">My wishlist</a></li> {% endcomment %}
+                        </ul>
+                    </aside> <!-- col.// -->
+                </div> <!-- row.// -->
+            </section> <!-- footer-top.// -->
+        </div> <!-- container.// -->
+    </footer> <!-- section-footer.// -->
 </body>
 </html>

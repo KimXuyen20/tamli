@@ -5,6 +5,8 @@ from accounts.models import Account, UserProfile
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import slugify
+from django.contrib.auth.views import redirect_to_login
+
 
 from doctor.forms import DoctorForm
 
@@ -12,7 +14,7 @@ from doctor.forms import DoctorForm
 def register(request):
     if request.user.is_authenticated:
         messages.warning(request, 'You are already logged in!')
-        return redirect('dashboard')
+        return redirect('profile')
     elif request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -142,6 +144,21 @@ def edit(request):
         'profile_form': profile_form,
     }        
     return render(request,'accounts/profile_edit.html',context)
+
+def profile_view(request, email=None):
+    if email:
+        profile = get_object_or_404(Account, email=email).profile
+    else:
+        try:
+            profile = request.user.profile
+        except:
+            return redirect_to_login(request.get_full_path())
+    return render(request, 'accounts/profile.html', {'profile':profile})
+
+
+@login_required
+def profile_settings_view(request):
+    return render(request, 'accounts/profile_settings.html')
 
 
 

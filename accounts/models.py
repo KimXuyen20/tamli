@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.conf import settings
+
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -92,6 +94,13 @@ class UserProfile(models.Model):
     photo = models.ImageField(blank=True, upload_to='uploads/photos/')
     country = models.CharField(null=True, blank=True, max_length=20)
     city = models.CharField(null=True, blank=True, max_length=20)
+
+
+    @property
+    def photo(self):
+        if self.image:
+            return self.image.url
+        return f'{settings.STATIC_URL}images/avatar.svg'
 
 
     def __str__(self):

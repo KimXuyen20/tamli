@@ -43,12 +43,12 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-   
+    'django_htmx',
     'accounts',
     'blogs',
     'doctor',
     'chat',
-    'django_htmx',
+    
 ]
 
 MIDDLEWARE = [
@@ -83,18 +83,13 @@ TEMPLATES = [
 ]
 
 # WSGI_APPLICATION = 'tuvan.wsgi.application'
-
 ASGI_APPLICATION = 'tuvan.asgi.application'
 
-
 CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-        }
-},
-
-
-
+    'default': {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
 
 
 AUTH_USER_MODEL = 'accounts.Account'

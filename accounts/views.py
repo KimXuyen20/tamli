@@ -1,5 +1,6 @@
-from django.shortcuts import redirect, render
-from accounts.forms import RegistrationForm, UserForm
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from accounts.forms import RegistrationForm, UserForm, UserProfileForm
 from accounts.models import Account, UserProfile
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
@@ -17,13 +18,13 @@ def register(request):
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            username = form.cleaned_data['username']
+            # username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = Account.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
-                username=username,
+               
                 email=email,
                 password=password
             )
@@ -45,7 +46,7 @@ def register(request):
 def login(request):
     if request.user.is_authenticated:
         messages.warning(request, 'You are already logged in!')
-        return redirect('myAccount')
+        return redirect('home')
     elif request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -119,3 +120,28 @@ def registerDoctor(request):
     }
     
     return render(request, 'accounts/registerDoctor.html', context)
+
+
+
+@login_required
+def edit(request):
+    userprofile = get_object_or_404(UserProfile, user= request.user)
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Your profile has been updated.")
+            return redirect('edit')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form= UserProfileForm(instance=userprofile)
+    context ={
+        'user_form': user_form,
+        'profile_form': profile_form,
+    }        
+    return render(request,'accounts/profile_edit.html',context)
+
+
+

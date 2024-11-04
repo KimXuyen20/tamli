@@ -1,4 +1,11 @@
 from django.shortcuts import render
 
+from blogs.models import Blog
+
+
 def home(request):
-    return render(request,'home.html')
+    blogs = Blog.objects.all().filter(is_available=True)
+    context={
+        'blogs':blogs
+    }
+    return render(request,'home.html',context)

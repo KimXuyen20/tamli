@@ -32,15 +32,23 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+   
     'accounts',
     'blogs',
     'doctor',
+    'chat',
+    'django_htmx',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +59,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
+    
 ]
 
 ROOT_URLCONF = 'tuvan.urls'
@@ -71,7 +82,20 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tuvan.wsgi.application'
+# WSGI_APPLICATION = 'tuvan.wsgi.application'
+
+ASGI_APPLICATION = 'tuvan.asgi.application'
+
+
+CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+        }
+},
+
+
+
+
 
 AUTH_USER_MODEL = 'accounts.Account'
 
@@ -124,10 +148,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
 STATICFILES_DIRS = [
-    'tuvan/static',
+    os.path.join(BASE_DIR, 'tuvan/static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
 

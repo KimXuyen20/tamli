@@ -2,11 +2,8 @@ from django.shortcuts import render
 from blogs.models import Blog
 # Create your views here.
 
-def home(request):
-    return render(request,'home.html')
-def blog(request):
 
-   
+def blog(request):  
 
     blogs = Blog.objects.filter(is_available=True)
     
